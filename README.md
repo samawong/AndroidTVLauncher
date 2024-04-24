@@ -28,7 +28,7 @@ CatLauncher (Leanback style) function has been basically stable at present, the 
 ### The next step to improve
 > * Follow up the official Leanback library new features
 
-###Bug
+### Bug
 > * Some error when play mp4 in TV platform.
 
 ### License
