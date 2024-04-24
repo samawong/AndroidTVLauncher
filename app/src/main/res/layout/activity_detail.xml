@@ -6,6 +6,7 @@
     <fragment
         android:id="@+id/browse_fragment"
         android:name="com.jacky.launcher.detail.MediaDetailsFragment"
+        class="com.jacky.launcher.detail.MediaDetailsFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 </LinearLayout>

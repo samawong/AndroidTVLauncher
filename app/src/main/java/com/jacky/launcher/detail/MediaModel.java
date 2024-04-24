@@ -91,7 +91,7 @@ public class MediaModel implements Parcelable {
     public static List<MediaModel> getPhotoModels() {
         List<MediaModel> mediaModels = new ArrayList<>();
 
-        String titles[] = {
+        String[] titles = {
                 "北京",
                 "上海",
                 "西藏",
@@ -100,7 +100,7 @@ public class MediaModel implements Parcelable {
                 "迈克尔.杰克逊",
         };
 
-        String contents[] = {
+        String[] contents = {
                 "北京，简称“京”，中华人民共和国首都、直辖市、国家中心城市、超大城市，全国政治中心、文化中心、国际交往中心、科技创新中心，是中国共产党中央委员会、中华人民共和国中央人民政府和全国人民代表大会的办公所在地。\n" +
                         "北京位于华北平原北部，背靠燕山，毗邻天津市和河北省。北京的气候为典型的北温带半湿润大陆性季风气候。\n" +
                         "北京是首批国家历史文化名城和世界上拥有世界文化遗产数最多的城市，三千多年的历史孕育了故宫、天坛、八达岭长城、颐和园等众多名胜古迹。早在七十万年前，北京周口店地区就出现了原始人群部落“北京人”。公元前1045年，北京成为蓟、燕等诸侯国的都城。公元938年以来，北京先后成为辽陪都、金中都、元大都、明清国都。1949年10月1日成为中华人民共和国首都。\n" +
@@ -134,13 +134,13 @@ public class MediaModel implements Parcelable {
                         "2009年6月25日，杰克逊辞世，享年50岁。2011年11月7日下午，杰克逊的私人医师莫里 “过失杀人罪”罪名成立，服刑四年监禁。",
         };
 
-        String urls[] = {
-                "http://tupian.enterdesk.com/2012/0528/gha/9/120523112107-15.jpg",
-                "http://imgstore.cdn.sogou.com/app/a/100540002/541762.jpg",
-                "http://www.bz55.com/uploads/allimg/140729/138-140H9144A7.jpg",
-                "http://imgstore.cdn.sogou.com/app/a/100540002/717240.jpg",
-                "http://e.hiphotos.baidu.com/zhidao/pic/item/5ab5c9ea15ce36d3418e754838f33a87e850b1c4.jpg",
-                "http://www.bz55.com/uploads/allimg/150402/139-150402152530.jpg",
+        String[] urls = {
+                "https://www.4kbizhi.com/d/file/2024/04/17/small090722cPagu1713316042.jpg",
+                "https://www.4kbizhi.com/d/file/2024/04/10/small110953GmWx81712718593.jpg",
+                "https://www.4kbizhi.com/d/file/2024/04/15/small084734aHqIf1713142054.jpg",
+                "https://www.4kbizhi.com/d/file/2024/04/10/small074357Pb7mp1712706237.jpg",
+                "https://www.4kbizhi.com/d/file/2024/04/10/small074357Pb7mp1712706237.jpg",
+                "https://www.4kbizhi.com/d/file/2024/03/27/small134016YaTv71711518016.jpg",
         };
 
         for (int i = 0; i < titles.length; i++) {
@@ -154,12 +154,12 @@ public class MediaModel implements Parcelable {
     public static List<MediaModel> getVideoModels() {
         List<MediaModel> mediaModels = new ArrayList<>();
 
-        String titles[] = {
+        String[] titles = {
                 "CCTV1",
                 "湖南卫视",
         };
 
-        String contents[] = {
+        String[] contents = {
                 "中央电视台综合频道（频道呼号：CCTV-1综合）是以新闻为主的综合类电视频道，是中央电视台第一套节目，于1958年9月2日开播。\n" +
                         "1958年5月1日，CCTV-1开始试验播出，呼号“北京电视台”。1978年5月1日，“北京电视台”正式更名为中央电视台。1995年4月3日，CCTV-1正式更名为“新闻·综合频道”。 " +
                         " 2003年5月1日，CCTV-1由新闻·综合频道改为综合频道。 2009年9月27日，CCTV-1开播高清信号，实现高、标清同播。2011年3月，CCTV-1分版为境内版和香港版（香港版起初由亚洲电视转播，后改为NOW TV转播）",
@@ -170,14 +170,14 @@ public class MediaModel implements Parcelable {
                         "2016年4月，湖南卫视推出了“越新鲜越青春”的频道口号。",
         };
 
-        String urls[] = {
+        String[] urls = {
                 "http://hiphotos.baidu.com/%B1%A1%B1%CC%C0%B6%C9%C0/pic/item/e0d2dc358b514685d1a2d3fa.jpg",
                 "http://imgsrc.baidu.com/forum/pic/item/410e5aafa40f4bfbd8a9a68a034f78f0f63618fa.jpg",
         };
 
-        String videoUrls[] = {
-                "http://eshare.live.otvcloud.com/otv/nyz/live/channel01/index.m3u8",
-                "http://111.39.226.103:8112/120000001001/wlds:8080/ysten-business/live/hdhunanstv/.m3u8",
+        String[] videoUrls = {
+                "https://minigame.vip/Uploads/images/2021/09/18/1631951892_page_img.mp4",
+                "https://media.geeksforgeeks.org/wp-content/uploads/20201217163353/Screenrecorder-2020-12-17-16-32-03-350.mp4",
         };
 
         for (int i = 0; i < titles.length; i++) {

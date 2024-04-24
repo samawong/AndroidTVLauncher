@@ -2,10 +2,12 @@ package com.jacky.launcher.function;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v17.leanback.widget.ImageCardView;
-import android.support.v17.leanback.widget.Presenter;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import androidx.core.content.ContextCompat;
+import androidx.leanback.widget.ImageCardView;
+import androidx.leanback.widget.Presenter;
 
 import com.jacky.launcher.R;
 
@@ -17,30 +19,38 @@ import com.jacky.launcher.R;
  * @since 16/7/16
  */
 public class FunctionCardPresenter extends Presenter {
-
+    private  int mSelectedBackgroundColor = -1;
+    private  int mDefaultBackgroundColor = -1;
     private Context mContext;
-    private int CARD_WIDTH = 313;
-    private int CARD_HEIGHT = 176;
+    private final int CARD_WIDTH = 313;
+    private final int CARD_HEIGHT = 176;
     private Drawable mDefaultCardImage;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        mContext = parent.getContext();
-        mDefaultCardImage = mContext.getResources().getDrawable(R.drawable.pic_default);
-        ImageCardView cardView = new ImageCardView(mContext) {
+        mDefaultBackgroundColor = ContextCompat.getColor(parent.getContext(),R.color.default_background);
+        mSelectedBackgroundColor = ContextCompat.getColor(parent.getContext(),R.color.selected_background);
+        ImageCardView cardView = new ImageCardView(parent.getContext()) {
             @Override
             public void setSelected(boolean selected) {
-                int selected_background = mContext.getResources().getColor(R.color.detail_background);
-                int default_background = mContext.getResources().getColor(R.color.default_background);
-                int color = selected ? selected_background : default_background;
-                findViewById(R.id.info_field).setBackgroundColor(color);
+
+                updateCartBackgroundColor(this, selected);
                 super.setSelected(selected);
             }
         };
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
+        updateCartBackgroundColor(cardView,false);
         return new ViewHolder(cardView);
     }
+
+    private void updateCartBackgroundColor(ImageCardView view, boolean selected){
+        int color = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
+
+        view.setBackgroundColor(color);
+        view.findViewById(androidx.leanback.R.id.info_field).setBackgroundColor(color);
+    }
+
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {

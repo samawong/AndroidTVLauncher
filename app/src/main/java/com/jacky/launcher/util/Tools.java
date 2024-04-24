@@ -29,7 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class Tools {
-    private static String TAG = "Tools";
+    private static final String TAG = "Tools";
 
     private final static String[] hexDigits = {"0", "1", "2", "3", "4", "5",
             "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
@@ -139,11 +139,7 @@ public final class Tools {
      */
     public static boolean hasSdcard() {
         String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            return true;
-        } else {
-            return false;
-        }
+        return state.equals(Environment.MEDIA_MOUNTED);
     }
 
     /**

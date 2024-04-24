@@ -1,29 +1,37 @@
 
 package com.jacky.launcher.main;
 
+import static androidx.leanback.app.BrowseSupportFragment.HEADERS_ENABLED;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v17.leanback.app.BackgroundManager;
-import android.support.v17.leanback.app.BrowseFragment;
-import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.HeaderItem;
-import android.support.v17.leanback.widget.ImageCardView;
-import android.support.v17.leanback.widget.ListRow;
-import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnItemViewClickedListener;
-import android.support.v17.leanback.widget.OnItemViewSelectedListener;
-import android.support.v17.leanback.widget.Presenter;
-import android.support.v17.leanback.widget.Row;
-import android.support.v17.leanback.widget.RowPresenter;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.util.DisplayMetrics;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.leanback.app.BackgroundManager;
+import androidx.leanback.app.BrowseSupportFragment;
+import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.HeaderItem;
+import androidx.leanback.widget.ImageCardView;
+import androidx.leanback.widget.ListRow;
+import androidx.leanback.widget.ListRowPresenter;
+import androidx.leanback.widget.OnItemViewClickedListener;
+import androidx.leanback.widget.OnItemViewSelectedListener;
+import androidx.leanback.widget.Presenter;
+import androidx.leanback.widget.Row;
+import androidx.leanback.widget.RowPresenter;
+import androidx.multidex.MultiDex;
+
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.jacky.launcher.R;
 import com.jacky.launcher.app.AppCardPresenter;
 import com.jacky.launcher.app.AppDataManage;
@@ -36,13 +44,18 @@ import com.jacky.launcher.function.FunctionModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
-
-    protected BrowseFragment mBrowseFragment;
+public class MainActivity extends FragmentActivity {
+    private BrowseSupportFragment mBrowserSupportFragment;
     private ArrayObjectAdapter rowsAdapter;
     private BackgroundManager mBackgroundManager;
     private DisplayMetrics mMetrics;
     private Context mContext;
+
+    @Override
+    protected void attachBaseContext(Context context){
+        super.attachBaseContext(context);
+        MultiDex.install(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +63,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mContext = this;
-        mBrowseFragment = (BrowseFragment) getFragmentManager().findFragmentById(R.id.browse_fragment);
+        //mBrowseFragment = (BrowseFragment) getFragmentManager().findFragmentById(R.id.browse_fragment
+        mBrowserSupportFragment = (BrowseSupportFragment) getSupportFragmentManager().findFragmentById(R.id.browse_fragment);
+        //getSupportFragmentManager().beginTransaction().add(R.id.browse_fragment,mBrowserSupportFragment).commitAllowingStateLoss();
 
-        mBrowseFragment.setHeadersState(BrowseFragment.HEADERS_DISABLED);
-        mBrowseFragment.setTitle(getString(R.string.app_name));
+        mBrowserSupportFragment.setHeadersState(HEADERS_ENABLED);
+        mBrowserSupportFragment.setTitle(getString(R.string.app_name));
 
         prepareBackgroundManager();
         buildRowsAdapter();
@@ -74,12 +89,11 @@ public class MainActivity extends Activity {
         addAppRow();
         addFunctionRow();
 
-        mBrowseFragment.setAdapter(rowsAdapter);
-        mBrowseFragment.setOnItemViewClickedListener(new OnItemViewClickedListener() {
+        mBrowserSupportFragment.setAdapter(rowsAdapter);
+        mBrowserSupportFragment.setOnItemViewClickedListener(new OnItemViewClickedListener() {
             @Override
             public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-                if (item instanceof MediaModel) {
-                    MediaModel mediaModel = (MediaModel) item;
+                if (item instanceof MediaModel mediaModel) {
                     Intent intent = new Intent(mContext, MediaDetailsActivity.class);
                     intent.putExtra(MediaDetailsActivity.MEDIA, mediaModel);
 
@@ -88,39 +102,43 @@ public class MainActivity extends Activity {
                             ((ImageCardView) itemViewHolder.view).getMainImageView(),
                             MediaDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
                     startActivity(intent, bundle);
-                } else if (item instanceof AppModel) {
-                    AppModel appBean = (AppModel) item;
+                } else if (item instanceof AppModel appBean) {
                     Intent launchIntent = mContext.getPackageManager().getLaunchIntentForPackage(
                             appBean.getPackageName());
                     if (launchIntent != null) {
                         mContext.startActivity(launchIntent);
                     }
-                } else if (item instanceof FunctionModel) {
-                    FunctionModel functionModel = (FunctionModel) item;
+                } else if (item instanceof FunctionModel functionModel) {
                     Intent intent = functionModel.getIntent();
                     if (intent != null) {
                         startActivity(intent);
                     }
                 }
             }
-        });
-        mBrowseFragment.setOnItemViewSelectedListener(new OnItemViewSelectedListener() {
-            @Override
-            public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
-                if (item instanceof MediaModel) {
 
-                    MediaModel mediaModel = (MediaModel) item;
+        });
+        mBrowserSupportFragment.setOnItemViewSelectedListener(new OnItemViewSelectedListener() {
+            //@Override
+            public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item, RowPresenter.ViewHolder rowViewHolder, Row row) {
+                if (item instanceof MediaModel mediaModel) {
+
                     int width = mMetrics.widthPixels;
                     int height = mMetrics.heightPixels;
 
                     Glide.with(mContext)
-                            .load(mediaModel.getImageUrl())
                             .asBitmap()
+                            .load(mediaModel.getImageUrl())
                             .centerCrop()
-                            .into(new SimpleTarget<Bitmap>(width, height) {
+                            .into(new CustomTarget<Bitmap>() {
                                 @Override
-                                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                                    mBackgroundManager.setBitmap(resource);
+                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                   int height = resource.getHeight();
+                                   int width = resource.getWidth();
+                                }
+
+                                @Override
+                                public void onLoadCleared(@Nullable Drawable placeholder) {
+
                                 }
                             });
                 } else {

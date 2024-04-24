@@ -3,27 +3,33 @@ package com.jacky.launcher.detail;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v17.leanback.app.BackgroundManager;
-import android.support.v17.leanback.app.DetailsFragment;
-import android.support.v17.leanback.widget.Action;
-import android.support.v17.leanback.widget.ArrayObjectAdapter;
-import android.support.v17.leanback.widget.ClassPresenterSelector;
-import android.support.v17.leanback.widget.DetailsOverviewLogoPresenter;
-import android.support.v17.leanback.widget.DetailsOverviewRow;
-import android.support.v17.leanback.widget.FullWidthDetailsOverviewRowPresenter;
-import android.support.v17.leanback.widget.ListRow;
-import android.support.v17.leanback.widget.ListRowPresenter;
-import android.support.v17.leanback.widget.OnActionClickedListener;
-import android.support.v17.leanback.widget.SparseArrayObjectAdapter;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.leanback.app.BackgroundManager;
+import androidx.leanback.app.DetailsSupportFragment;
+import androidx.leanback.widget.Action;
+import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.ClassPresenterSelector;
+import androidx.leanback.widget.DetailsOverviewLogoPresenter;
+import androidx.leanback.widget.DetailsOverviewRow;
+import androidx.leanback.widget.FullWidthDetailsOverviewRowPresenter;
+import androidx.leanback.widget.ListRow;
+import androidx.leanback.widget.ListRowPresenter;
+import androidx.leanback.widget.OnActionClickedListener;
+import androidx.leanback.widget.SparseArrayObjectAdapter;
+
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.jacky.launcher.video.VideoActivity;
 
 /**
@@ -31,14 +37,14 @@ import com.jacky.launcher.video.VideoActivity;
  * @version v1.0
  * @since 16/8/28
  */
-public class MediaDetailsFragment extends DetailsFragment {
+public class MediaDetailsFragment extends DetailsSupportFragment {
 
-    private ArrayObjectAdapter mRowsAdapter;
+    private ArrayObjectAdapter  mRowsAdapter;
     private MediaModel mMediaModel;
     private Context mContext;
     private static final int ACTION_WATCH_TRAILER = 1;
 
-    private BackgroundManager mBackgroundManager;
+    private  BackgroundManager mBackgroundManager;
     private DisplayMetrics mMetrics;
 
     @Override
@@ -60,7 +66,7 @@ public class MediaDetailsFragment extends DetailsFragment {
     }
 
     private void buildDetails() {
-        ClassPresenterSelector selector = new ClassPresenterSelector();
+         ClassPresenterSelector selector = new ClassPresenterSelector();
         FullWidthDetailsOverviewRowPresenter rowPresenter = new FullWidthDetailsOverviewRowPresenter(
                 new MediaDetailsDescriptionPresenter(),
                 new DetailsOverviewLogoPresenter());
@@ -76,6 +82,7 @@ public class MediaDetailsFragment extends DetailsFragment {
                     Toast.makeText(getActivity(), action.toString(), Toast.LENGTH_SHORT).show();
                 }
             }
+
         });
 
         selector.addClassPresenter(DetailsOverviewRow.class, rowPresenter);
@@ -85,22 +92,22 @@ public class MediaDetailsFragment extends DetailsFragment {
         final DetailsOverviewRow detailsOverview = new DetailsOverviewRow(mMediaModel);
 
         Glide.with(mContext)
-                .load(mMediaModel.getImageUrl())
                 .asBitmap()
-                .listener(new RequestListener<String, Bitmap>() {
+                .load(mMediaModel.getImageUrl())
+                .listener(new RequestListener<Bitmap>() {
 
                     @Override
-                    public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
                         return false;
                     }
 
                     @Override
-                    public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                        detailsOverview.setImageBitmap(mContext, resource);
+                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        detailsOverview.setImageBitmap(mContext,resource);
                         return true;
                     }
-                })
-                .into(-1, -1);
+
+                });
 
         updateBackground(mMediaModel.getImageUrl());
 
@@ -116,15 +123,21 @@ public class MediaDetailsFragment extends DetailsFragment {
 
     private void updateBackground(String uri) {
         Glide.with(this)
-                .load(uri)
                 .asBitmap()
+                .load(uri)
                 .centerCrop()
-                .into(new SimpleTarget<Bitmap>(mMetrics.widthPixels, mMetrics.heightPixels) {
+                .into(new CustomTarget<Bitmap>(mMetrics.widthPixels, mMetrics.heightPixels) {
                     @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         mBackgroundManager.setBitmap(resource);
                     }
-                });
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                }
+     );
     }
 
     @Override

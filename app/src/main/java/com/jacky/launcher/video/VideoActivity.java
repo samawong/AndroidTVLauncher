@@ -1,48 +1,114 @@
 package com.jacky.launcher.video;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.ui.PlayerView;
 
 import com.jacky.launcher.R;
 import com.jacky.launcher.detail.MediaModel;
 
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
+//import cn.jzvd.Jzvd;
+//import cn.jzvd.JzvdStd;
 
-public class VideoActivity extends Activity {
+@UnstableApi public class VideoActivity extends Activity {
 
-    private JCVideoPlayerStandard jcVideoPlayerStandard;
+    protected PlayerView playerView;
     public static final String VIDEO = "Video";
     private MediaModel mMediaModel;
+    protected  @Nullable ExoPlayer player;
+
+    private  boolean playWhenReady = true;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_video);
-
         mMediaModel = getIntent().getParcelableExtra(VideoActivity.VIDEO);
+        setContentView();
 
-        JCVideoPlayer.TOOL_BAR_EXIST = false;
-        JCVideoPlayer.ACTION_BAR_EXIST = false;
+        playerView = findViewById(R.id.player_view);
+        playerView.requestFocus();
 
-        jcVideoPlayerStandard = (JCVideoPlayerStandard) findViewById(R.id.video_player);
-
-        jcVideoPlayerStandard.setUp(mMediaModel.getVideoUrl()
-                , JCVideoPlayerStandard.SCREEN_LAYOUT_LIST, mMediaModel.getTitle());
-        jcVideoPlayerStandard.startPlayLocic();
     }
 
     @Override
-    public void onBackPressed() {
-        if (JCVideoPlayer.backPress()) {
-            return;
+    public void onStart(){
+        super.onStart();
+        if(Build.VERSION.SDK_INT > 23){
+            initializerPlay();
+            if(playerView != null){
+                playerView.onResume();
+            }
         }
-        super.onBackPressed();
     }
 
     @Override
-    protected void onPause() {
+    public void onResume(){
+        super.onResume();
+        if(Build.VERSION.SDK_INT <= 23 || player == null){
+            initializerPlay();
+            if(playerView != null){
+                playerView.onResume();
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
         super.onPause();
-        JCVideoPlayer.releaseAllVideos();
+        if (Build.VERSION.SDK_INT <= 23) {
+            if (playerView != null) {
+                playerView.onPause();
+            }
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Build.VERSION.SDK_INT > 23) {
+            if (playerView != null) {
+                playerView.onPause();
+            }
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    protected void setContentView() {
+        setContentView(R.layout.activity_video);
+    }
+
+    private void initializerPlay(){
+        if(player == null){
+            player = new ExoPlayer.Builder(this).build();
+            player.setPlayWhenReady(false);
+            playerView.setPlayer(player);
+        }
+        //player.addMediaItem(MediaItem.fromUri(mMediaModel.getVideoUrl()));
+        MediaItem mediaItem = new MediaItem.Builder().setUri(mMediaModel.getVideoUrl()).build();
+        player.setMediaItem(mediaItem);
+        player.setPlayWhenReady(playWhenReady);
+        playerView.setPlayer(player);
+        player.prepare();
+    }
+
+    protected void releasePlayer(){
+        if(player != null){
+            playWhenReady = player.getPlayWhenReady();
+            player.release();
+        }
+        player = null;
     }
 }

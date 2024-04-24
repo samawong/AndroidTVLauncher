@@ -6,15 +6,14 @@ package com.jacky.launcher.detail;
  * @since 16/8/28
  */
 
-import android.support.v17.leanback.widget.AbstractDetailsDescriptionPresenter;
+import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
 
 public class MediaDetailsDescriptionPresenter extends AbstractDetailsDescriptionPresenter {
 
     @Override
     protected void onBindDescription(ViewHolder viewHolder, Object itemData) {
 
-        if(itemData instanceof MediaModel){
-            MediaModel mediaModel = (MediaModel) itemData;
+        if(itemData instanceof MediaModel mediaModel){
             viewHolder.getSubtitle().setText(mediaModel.getTitle());
             viewHolder.getBody().setText(mediaModel.getContent());
         }

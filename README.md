@@ -1,13 +1,9 @@
 
 # AndroidTVLauncher
 
-[中文文档](https://github.com/JackyAndroid/AndroidTVLauncher/blob/master/README-CN.md)
-
 ![](https://github.com/JackyAndroid/AndroidTVLauncher/blob/master/Cat/src/main/res/mipmap-xxhdpi/ic_launcher.jpg)
 
-[Download Apk](https://github.com/JackyAndroid/AndroidTVLauncher/releases)
-
-This is a tv launcher, include a leanback launcher(minSdkVersion 17).
+This is a tv launcher, include a leanback launcher(minSdkVersion 19),modify [this repository](https://github.com/JackyAndroid/AndroidTVLauncher),and use androidx meida3.
 
 ### Notice
 CatLauncher (Leanback style) function has been basically stable at present, the progress of the follow-up will follow up the official Leanback library
@@ -21,16 +17,19 @@ CatLauncher (Leanback style) function has been basically stable at present, the 
 > * Desktop special function
 
 ### Effect Picture
-![](https://github.com/JackyAndroid/AndroidTVLauncher/blob/master/screenshots/design_sketch1.png)
-![](https://github.com/JackyAndroid/AndroidTVLauncher/blob/master/screenshots/design_sketch2.png)
-![](https://github.com/JackyAndroid/AndroidTVLauncher/blob/master/screenshots/design_sketch3.png)
-![](https://github.com/JackyAndroid/AndroidTVLauncher/blob/master/screenshots/design_sketch4.png)
-![](https://github.com/JackyAndroid/AndroidTVLauncher/blob/master/screenshots/design_sketch5.png)
-![](https://github.com/JackyAndroid/AndroidTVLauncher/blob/master/screenshots/design_sketch6.png)
-![](https://github.com/JackyAndroid/AndroidTVLauncher/blob/master/screenshots/design_sketch7.png)
+![](https://github.com/samawong/AndroidTVLauncher/blob/master/screenshots/design_sketch1.png)
+![](https://github.com/samawong/AndroidTVLauncher/blob/master/screenshots/design_sketch2.png)
+![](https://github.com/samawong/AndroidTVLauncher/blob/master/screenshots/design_sketch3.png)
+![](https://github.com/samawong/AndroidTVLauncher/blob/master/screenshots/design_sketch4.png)
+![](https://github.com/samawong/AndroidTVLauncher/blob/master/screenshots/design_sketch5.png)
+![](https://github.com/samawong/AndroidTVLauncher/blob/master/screenshots/design_sketch6.png)
+![](https://github.com/samawong/AndroidTVLauncher/blob/master/screenshots/design_sketch7.png)
 
 ### The next step to improve
 > * Follow up the official Leanback library new features
+
+###Bug
+> * Some error when play mp4 in TV platform.
 
 ### License
 

@@ -15,3 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+#-keep class cn.jzvd.**{*;}
+#-keep public class * extends cn.jzvd.JZMediaInterface
+#-keep public class * extends cn.jzvd.JzvdStd

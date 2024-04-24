@@ -3,6 +3,7 @@ package com.jacky.launcher.app;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -45,7 +46,7 @@ public class AppDataManage {
             PackageInfo mPackageInfo;
             try {
                 mPackageInfo = mContext.getPackageManager().getPackageInfo(pkgName, 0);
-                if ((mPackageInfo.applicationInfo.flags & mPackageInfo.applicationInfo.FLAG_SYSTEM) > 0) {// 系统预装
+                if ((mPackageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0) {// 系统预装
                     localAppBean.setSysApp(true);
                 }
             } catch (NameNotFoundException e) {
@@ -82,7 +83,7 @@ public class AppDataManage {
             PackageInfo mPackageInfo;
             try {
                 mPackageInfo = mContext.getPackageManager().getPackageInfo(pkgName, 0);
-                if ((mPackageInfo.applicationInfo.flags & mPackageInfo.applicationInfo.FLAG_SYSTEM) > 0) {// 系统预装
+                if ((mPackageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0) {// 系统预装
                     localAppBean.setSysApp(true);
                 } else {
                     localArrayList.add(localAppBean);
@@ -120,7 +121,7 @@ public class AppDataManage {
             try {
                 PackageInfo mPackageInfo = mContext.getPackageManager().getPackageInfo(pkgName, 0);
                 if ((PackageManager.PERMISSION_GRANTED == localPackageManager.checkPermission(permission, pkgName))
-                        && !((mPackageInfo.applicationInfo.flags & mPackageInfo.applicationInfo.FLAG_SYSTEM) > 0)) {
+                        && !((mPackageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) > 0)) {
                     localArrayList.add(localAppBean);
                 }
             } catch (NameNotFoundException e) {
